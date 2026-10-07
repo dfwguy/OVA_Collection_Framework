@@ -24,7 +24,7 @@ class ConfigurationTests(unittest.TestCase):
         self.assertEqual(len(list((out/'systemd').glob('*'))),13);self.assertFalse(Path(self.config['root']).exists())
         self.assertNotEqual(subprocess.run(args,capture_output=True).returncode,0)
     def test_jobcomp_preserves_existing_plugins_and_includes(self):
-        for text in ['JobCompType=jobcomp/kafka\n','Include /etc/slurm/site.conf\n','JobCompType=jobcomp/filetxt\nJobCompLoc=/another/path\n']:
+        for text in ['JobCompType=jobcomp/kafka\n','Include /etc/slurm/site.conf\n','include /etc/slurm/site.conf\n','JobCompType=jobcomp/filetxt\nJobCompLoc=/another/path\n']:
             self.path.write_text(text)
             with self.assertRaises(ValueError):jobcomp_plan(self.config,self.path)
     def test_native_jobcomp_change_retains_unrelated_config(self):

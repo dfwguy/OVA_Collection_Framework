@@ -12,16 +12,18 @@ def assert_no_symlinks(path):
 def jobcomp_plan(config,path):
     import re
     text=Path(path).read_text()
-    types=re.findall(r'^\s*JobCompType\s*=\s*(\S+)',text,re.M)
-    locations=re.findall(r'^\s*JobCompLoc\s*=\s*(\S+)',text,re.M)
+    if re.search(r'^\s*Include\b',text,re.M|re.I):
+        raise ValueError('Included Slurm configuration requires site review; existing integrations preserved')
+    types=re.findall(r'^\s*JobCompType\s*=\s*(\S+)',text,re.M|re.I)
+    locations=re.findall(r'^\s*JobCompLoc\s*=\s*(\S+)',text,re.M|re.I)
     if types and types[-1] not in ('jobcomp/none','none','jobcomp/filetxt'):
         raise ValueError('Existing completion plugin preserved; use its adapter or accounting instead')
     if types and types[-1]=='jobcomp/filetxt':
         if locations and locations[-1]==config['completion_log']:return text,text
         raise ValueError('Existing filetxt location differs; configure the collector to match it')
-    if re.search(r'^\s*(Include|JobCompLoc)\b',text,re.M):
+    if re.search(r'^\s*(Include|JobCompLoc)\b',text,re.M|re.I):
         raise ValueError('Included/existing Slurm configuration needs site review; use an existing durable source')
-    new=re.sub(r'^\s*JobCompType\s*=.*$','',text,flags=re.M)
+    new=re.sub(r'^\s*JobCompType\s*=.*$','',text,flags=re.M|re.I)
     return text,new+'\n# OVA Collection Framework: native durable completion feed\nJobCompType=jobcomp/filetxt\nJobCompLoc='+config['completion_log']+'\n'
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('mode',choices=['plan','apply']);p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--wheelhouse',type=Path);p.add_argument('--configure-jobcomp',type=Path,metavar='SLURM_CONF');p.add_argument('--slurm-user',default='slurm');a=p.parse_args()
