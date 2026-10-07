@@ -10,7 +10,7 @@ Copy `examples/cluster.example.json` outside the checkout. Every cluster needs i
 
 Create approved run directories before deployment. Grant the collection identity read/search ACLs on controller/completion logs and durable run roots. Grant authorized runners write access only to their run directories and trusted `state/runner-manifests`; keep service code and secrets root-owned. Prefer default ACLs so new files retain the right reader permissions. Decide source retention before commissioning: worst allowed outage + fleet revisit time + export/verification margin. ACL policy is platform-specific and cannot safely be inferred from job owners.
 
-For remote node-local capture, provision a dedicated read-only SSH identity, known-host entries and allowlisted run roots on every scoped node. The collector never disables host-key checking. For a shared-artifact deployment, remote access can remain unused, but native completion and shared logs must still be retained. A remote path alone is not proof it is readable or persistent across reboot.
+The example defaults to local/shared artifact capture (`remote_capture_enabled=false`) and performs no compute-node SSH reads. For remote node-local capture, set `remote_capture_enabled=true` and provision a dedicated read-only SSH identity, known-host entries and allowlisted run roots on every scoped node. The collector never disables host-key checking. For a shared-artifact deployment, remote access can remain unused, but native completion and shared logs must still be retained. A remote path alone is not proof it is readable or persistent across reboot.
 
 ## Installation commands
 

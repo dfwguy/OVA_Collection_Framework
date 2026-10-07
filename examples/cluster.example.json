@@ -45,5 +45,6 @@
   "accounting_poll_seconds": 300,
   "browser_secure_cookie": false,
   "local_stream_threshold_bytes": 268435456,
-  "local_stream_timeout_seconds": 120
+  "local_stream_timeout_seconds": 120,
+  "remote_capture_enabled": false
 }

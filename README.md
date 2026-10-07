@@ -8,7 +8,7 @@
 
 ## Deploy on a new cluster
 
-Use a dedicated collector host with Python 3.12+, systemd, persistent local storage and read access to the cluster's Slurm sources. Debian/Ubuntu with GNU utilities is the installer baseline; other Linux platforms need prerequisite adaptation. Compute-node access is optional when all run artifacts are on a durable shared filesystem readable by the collector.
+Use a dedicated collector host with Python 3.12+, systemd, persistent local storage and read access to the cluster's Slurm sources. Debian/Ubuntu with GNU utilities is the installer baseline; other Linux platforms need prerequisite adaptation. The example disables compute-node SSH reads. Compute-node access is optional when all run artifacts are on a durable shared filesystem readable by the collector.
 
 1. Download the **`ova-collection-framework.tar.gz`** CI artifact and its checksum. Verify, inspect member paths and extract into an empty directory. The bundle contains source and docs, not dependencies or cluster data.
 2. Copy `examples/cluster.example.json` to a private location outside the checkout. Replace site/cluster/epoch, source paths and narrow artifact roots. Arrange read ACLs for the collection identity; see [deployment](docs/deployment.md).

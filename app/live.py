@@ -99,6 +99,9 @@ def capture_host(job,host):
     c.execute('insert or replace into remote_coverage values(?,?,?,?,?,?,?)',(ident,host,summary.get('inventory_count',0),summary.get('captured_count',0),status,now(),'; '.join(problems)[:2000]));c.commit();c.close()
 
 def run(historical=False):
+    if not CONFIG.get('remote_capture_enabled',False):
+        name='historical-health' if historical else 'live-health'
+        atomic_write(ROOT/'state'/(name+'.json'),json.dumps({'updated_utc':now(),'status':'remote capture disabled; approved local/shared sources only'}));return
     checkpoint=ROOT/'state'/('remote-backfill.json' if historical else 'live-queue.json')
     state=json.loads(checkpoint.read_text()) if checkpoint.exists() else {'last_attempt':{}}
     jobs=load_manifests()

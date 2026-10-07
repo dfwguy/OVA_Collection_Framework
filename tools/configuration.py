@@ -32,7 +32,8 @@ def load(path):
         if type(v) is not int or not low<=v<=high:raise ValueError('Invalid bounded setting: '+key)
     if not re.fullmatch(r'[A-Za-z0-9_.@-]+\.service',config.get('slurm_service','')):
         raise ValueError('Invalid Slurm service')
-    if not isinstance(config.get('accounting_enabled'),bool):raise ValueError('accounting_enabled must be boolean')
+    for flag in ['accounting_enabled','remote_capture_enabled','browser_secure_cookie']:
+        if not isinstance(config.get(flag),bool):raise ValueError(flag+' must be boolean')
     for key in ('metadata','live','publication','search'):
         v=config.get('freshness_budget_seconds',{}).get(key)
         if type(v) is not int or not 30<=v<=86400:raise ValueError('Invalid freshness budget: '+key)

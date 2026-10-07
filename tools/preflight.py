@@ -8,6 +8,9 @@ def check(label,ok,detail):checks.append({'check':label,'ok':bool(ok),'detail':d
 for label in ['controller_log','browser_auth_file']:
     path=Path(c[label]);check(label,path.is_file() and os.access(path,os.R_OK),'Readable exact source required')
 check('terminal_feed',Path(c['completion_log']).is_file() and os.access(c['completion_log'],os.R_OK) or c['accounting_enabled'],'Durable completion log or verified accounting required')
+if c['remote_capture_enabled']:
+    for key in ['ssh_known_hosts','ssh_identity_file']:
+        check(key,Path(c[key]).is_file() and os.access(c[key],os.R_OK),'Remote capture requires readable provisioned SSH trust/identity')
 for path in c['local_roots']:check('local_root',Path(path).is_dir() and os.access(path,os.R_OK|os.X_OK),'Approved source root exists and is readable')
 for path in c['manifest_dirs']:check('manifest_directory',Path(path).is_dir() and os.access(path,os.W_OK|os.X_OK),'Trusted manifest directory writable')
 try:

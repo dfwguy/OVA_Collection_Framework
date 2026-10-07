@@ -39,7 +39,7 @@ class CollectorBoundaryTests(unittest.TestCase):
     def test_auth_cursor_local_path_escape_and_fair_host_queue(self):
         with tempfile.TemporaryDirectory() as temp:
             d=Path(temp);root=d/'root';root.mkdir();approved=d/'approved';approved.mkdir();outside=d/'outside';outside.write_text('outside-data-must-not-be-captured');(approved/'escape.log').symlink_to(outside);token=d/'token';token.write_text('fixture-only-credential-longer-than-thirty-two')
-            config=json.loads((BASE/'examples/cluster.example.json').read_text());config.update(root=str(root),site='fixture',cluster='fixture',epoch='fixture',manifest_dirs=[str(root/'state/job-manifests')],local_roots=[str(approved)],controller_log=str(d/'controller.log'),completion_log=str(d/'completion.log'),browser_auth_file=str(token),accounting_enabled=True,accounting_poll_seconds=60,max_remote_hosts_per_pass=2)
+            config=json.loads((BASE/'examples/cluster.example.json').read_text());config.update(root=str(root),site='fixture',cluster='fixture',epoch='fixture',manifest_dirs=[str(root/'state/job-manifests')],local_roots=[str(approved)],controller_log=str(d/'controller.log'),completion_log=str(d/'completion.log'),browser_auth_file=str(token),remote_capture_enabled=True,accounting_enabled=True,accounting_poll_seconds=60,max_remote_hosts_per_pass=2)
             path=d/'config.json';path.write_text(json.dumps(config));env=dict(os.environ,SLURM_HISTORY_CONFIG=str(path),PYTHONPATH=str(BASE/'app'))
             code=r'''
 import json,datetime as dt
