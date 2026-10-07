@@ -157,7 +157,7 @@ def local_scan(c):
      s=p.stat();src=str(p);old=c.execute('select size,mtime from files where source=?',(src,)).fetchone()
      if old and old==(s.st_size,s.st_mtime):
       parsed=c.execute("select 1 from metric_parser_files where source=? and parser='2026-10-07.portable1'",(src,)).fetchone()
-      if parsed or not name.endswith(('.log','.out','.err')):continue
+      if parsed or s.st_size>int(CONFIG.get('local_stream_threshold_bytes',256*1024*1024)) or not name.endswith(('.log','.out','.err')):continue
      if s.st_size>int(CONFIG.get('local_stream_threshold_bytes',256*1024*1024)):
       if name.endswith('-stage.tar.gz'):err(c,src,'oversized archive adapter required');continue
       from streaming import capture

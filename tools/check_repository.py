@@ -29,7 +29,7 @@ for path in files:
     if path.suffix=='.svg':
         try:
             node=ET.fromstring(text)
-            if not node.find('{http://www.w3.org/2000/svg}title') is not None:findings.append(rel+': SVG missing title')
+            if node.find('{http://www.w3.org/2000/svg}title') is None:findings.append(rel+': SVG missing title')
             if re.search(r'<script|(?:href|src)=[\"\']https?://',text,re.I):findings.append(rel+': active/external SVG content')
         except ET.ParseError:findings.append(rel+': invalid SVG')
 report={'status':'PASSED' if not findings else 'FAILED','tracked_files':len(files),'findings':findings,'scope':'Tracked publication tree only; bounded pattern and navigation checks, not live commissioning or exhaustive scanning'}
