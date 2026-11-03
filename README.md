@@ -68,3 +68,7 @@ python3 -m venv /var/tmp/ova-review-venv
 ```
 
 Run fixtures only in temporary lakes. CI tests source behavior, package integrity and unit rendering; it does not commission a customer cluster. Local exports stay local until delivery to a specific hub is authorized.
+
+## Portable deployment entry point
+
+Give [deploy.md](deploy.md) to your deployment agent for discovery, installation, execution and acceptance.
